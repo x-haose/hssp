@@ -4,7 +4,6 @@ import orjson
 import aiofiles
 from pandas import DataFrame
 from pandas import concat
-from aiomysql.sa import create_engine
 
 from hssp.item import Item
 
@@ -100,6 +99,3 @@ class ItemMgr(object):
 
         """
         return self._data_list
-
-    async def export_sql(self):
-        await create_engine()

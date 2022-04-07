@@ -1,8 +1,3 @@
-"""
-Scrapy Item
-
-See documentation in docs/topics/item.rst
-"""
 from abc import ABCMeta
 from inspect import isawaitable
 from typing import Dict, Any
@@ -27,10 +22,6 @@ class Field(object):
 
 
 class ItemMeta(ABCMeta):
-    """Metaclass_ of :class:`Item` that handles field definitions.
-
-    .. _metaclass: https://realpython.com/python-metaclasses
-    """
 
     def __new__(mcs, class_name, bases, attrs):
         classcell = attrs.pop('__classcell__', None)
@@ -215,18 +206,3 @@ class Item(DictItem, metaclass=ItemMeta):
 
         null = [] if f.many else None
         return results or f.default or null
-
-
-class TestItem(Item):
-    a = Field(xpath_select='xxxx')
-    b = Field(css_select='aaaa', re_select='ddd')
-    c = 0
-
-
-if __name__ == '__main__':
-    item = TestItem()
-    item.a = 1
-    item.b = 2
-    item.c = 10
-    print(item)
-    print(dict(item))
