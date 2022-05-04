@@ -9,7 +9,7 @@ def read(file_name):
 
 setup(
     name='hssp',
-    version='0.3.0',
+    version='0.3.1',
     author='昊色居士',
     author_email='xhrtxh@gmail.com',
     description='一个简单快速的异步爬虫框架',
