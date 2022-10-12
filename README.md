@@ -1,11 +1,10 @@
-
 # HSSP 爬虫框架
 
 一个基于python asyncio开发的爬虫框架
+
 ## 作者
 
 - [@昊色居士](https://github.com/x-haose)
-
 
 ## 特性
 
@@ -17,7 +16,6 @@
 - 内置`pyppeteer`框架支持动态爬取
 - 支持以`Item`方式爬取
 
-
 ## 安装
 
 使用 pip 安装 hssp
@@ -25,7 +23,7 @@
 ```bash
   pip install hssp
 ```
-    
+
 ## 路线图
 
 - 完善使用pyppeteer对网页内容进行下载（实现部分功能，但存在问题）
@@ -42,16 +40,14 @@
 
 如需支持，请发送电子邮件至 xhrtxh@gmail.com。
 
-
 ## 开发测试
 
 项目使用`pdm`管理依赖，需先安装pdm
 
 ```bash
     pip install pdm
-    pdm install
+    pdm sync
 ```
-
 
 ## 技术栈
 
@@ -62,8 +58,9 @@
 - 随机UA fake-useragent>
 - 动态爬取 pyppeteer
 - 数据处理 pandas、orjson、aiofiles
+
 ## 致谢
 
- - [基于asyncio和aiohttp的异步爬虫框架](https://github.com/howie6879/ruia)
- - [scrapy爬虫框架](https://github.com/scrapy/scrapy)
+- [基于asyncio和aiohttp的异步爬虫框架](https://github.com/howie6879/ruia)
+- [scrapy爬虫框架](https://github.com/scrapy/scrapy)
 

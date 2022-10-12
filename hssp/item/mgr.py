@@ -16,8 +16,8 @@ class ItemMgr(object):
 
     def add_item(self, item: Item):
         item_copy = dict()
+        self._data_list.append(item.copy())
         for k, v in item.copy().items():
-            self._data_list.append({k: v})
             if type(v) == list:
                 item_copy[k] = ' |$| '.join(v)
             else:

@@ -3,26 +3,24 @@ name = "hssp"
 version = "0.3.1"
 description = "一个简单快速的异步爬虫框架"
 authors = [
-    {name = "昊色居士", email = "xhrtxh@gmail.com"},
+    { name = "昊色居士", email = "xhrtxh@gmail.com" },
 ]
 dependencies = [
-    "aiohttp==3.7.4.post0",
-    "parsel==1.6.0",
-    "loguru==0.5.3",
-    "tenacity==7.0.0",
-    "furl==2.1.2",
-    "httpx==0.18.2",
-    "openpyxl>=3.0.9",
-    "aiomysql>=0.0.22",
+    "uvloop; sys_platform != 'win32' and implementation_name == 'cpython'",
+    "parsel>=1.6.0",
+    "loguru>=0.6.0",
+    "furl>=2.1.3",
+    "httpx>=0.23.0",
+    "openpyxl>=3.0.10",
     "fake-useragent>=0.1.11",
-    "pyppeteer>=0.0.25",
-    "pandas>=0.25.3",
-    "orjson>=3.6.1",
+    "pyppeteer>=1.0.2",
+    "pandas>=1.1.5",
+    "orjson>=3.8.0",
+    "tenacity>=8.0.1",
     "aiofiles>=0.8.0",
-    "uvloop; sys_platform != 'win32' and implementation_name == 'cpython'"
 ]
 requires-python = ">=3.7"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
 [project.urls]
 homepage = "https://github.com/x-haose/hssp"

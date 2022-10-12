@@ -164,6 +164,11 @@ class Response(object):
     def css(self, query):
         return self.selector.css(query, domain=self.domain)
 
+    def to_url(self, urls: typing.Union[list, str]):
+        urls = urls if type(urls) == list else [urls]
+        urls = [furl(self.url).join(url).url for url in urls]
+        return urls
+
     def re(self, regex, replace_entities=True):
         return self.selector.re(regex, replace_entities=replace_entities)
 
