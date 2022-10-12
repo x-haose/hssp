@@ -47,6 +47,7 @@ class Request(object):
     browser: Browser = field(default=None)
     is_browser: bool = field(default=False)
     _page: Page = field(default=None, init=False)
+    kwargs: dict = field(default_factory=dict)
 
     def __post_init__(self):
         # 设置user_agent
@@ -141,6 +142,7 @@ class Request(object):
                 data=self.data,
                 json=self.json,
                 params=self.params,
+                **self.kwargs
             )
         response = Response(
             ok=resp.status_code in self._setting.allow_codes,

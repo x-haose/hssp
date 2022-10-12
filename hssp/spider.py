@@ -256,7 +256,8 @@ class Spider:
             cookies: dict = None,
             callback: Callable = None,
             metadata: dict = None,
-            is_browser: bool = False
+            is_browser: bool = False,
+            **kwargs
     ) -> Request:
         """
         发生一个get请求
@@ -267,6 +268,7 @@ class Spider:
         :param callback: 请求结束之后的回调函数
         :param metadata: 向函数中传递的数据
         :param is_browser: 是否使用浏览器获取，速度会慢，但会执行网页中的js脚本
+        :param kwargs: httpx 请求的其他参数
         :return:
         """
         ua = self._fake_useragent.random if self._setting.random_ua else None
@@ -281,7 +283,8 @@ class Spider:
             callback=callback,
             metadata=metadata,
             browser=self._browser,
-            is_browser=is_browser
+            is_browser=is_browser,
+            **kwargs
         )
 
     async def post(
@@ -295,6 +298,7 @@ class Spider:
             cookies: dict = None,
             callback: Callable = None,
             metadata: dict = None,
+            **kwargs
     ) -> Request:
         """
         发送一个post请求
@@ -306,6 +310,7 @@ class Spider:
         :param cookies: 传递的cookies
         :param callback: 请求结束之后的回调函数
         :param metadata: 向函数中传递的数据
+        :param kwargs: httpx 请求的其他参数
         :return:
         """
         ua = self._fake_useragent.random if self._setting.random_ua else None
@@ -320,7 +325,8 @@ class Spider:
             headers=headers,
             cookies=cookies,
             callback=callback,
-            metadata=metadata
+            metadata=metadata,
+            **kwargs
         )
 
     async def handle_request(self, request: Request) -> Tuple[AsyncGeneratorType, Response]:
