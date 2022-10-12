@@ -1,7 +1,8 @@
 [project]
 name = "hssp"
-version = "0.3.1"
+version = "0.3.3"
 description = "一个简单快速的异步爬虫框架"
+readme = "README.md"
 authors = [
     { name = "昊色居士", email = "xhrtxh@gmail.com" },
 ]
@@ -21,12 +22,36 @@ dependencies = [
 ]
 requires-python = ">=3.7"
 license = { text = "MIT" }
+classifiers = [
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Development Status :: 4 - Beta",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: BSD",
+    "Operating System :: Microsoft :: Windows",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 
 [project.urls]
 homepage = "https://github.com/x-haose/hssp"
 
 [tool]
 [tool.pdm]
+
+[tool.pdm.build]
+excludes = ["./**/.git"]
+package-dir = "src"
+includes = ["hssp", "hssp/res/fake_useragent_0.1.11.json"]
+source-includes = ["tests", "LICENSE", "README.md"]
+
 [[tool.pdm.source]]
 name = "pypi"
 url = "https://mirrors.aliyun.com/pypi/simple/"
