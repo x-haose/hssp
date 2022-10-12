@@ -284,7 +284,7 @@ class Spider:
             metadata=metadata,
             browser=self._browser,
             is_browser=is_browser,
-            **kwargs
+            kwargs=kwargs
         )
 
     async def post(
@@ -326,7 +326,7 @@ class Spider:
             cookies=cookies,
             callback=callback,
             metadata=metadata,
-            **kwargs
+            kwargs=kwargs
         )
 
     async def handle_request(self, request: Request) -> Tuple[AsyncGeneratorType, Response]:
