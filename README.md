@@ -33,5 +33,5 @@
 项目使用`rye`管理依赖，需先安装rye
 
 ```bash
-    pdm sync
+    rye sync
 ```
