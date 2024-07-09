@@ -1,0 +1,157 @@
+[project]
+name = "hssp"
+version = "0.1.0"
+description = "一个简单快速的异步爬虫框架"
+authors = [
+    { name = "昊色居士", email = "xhrtxh@gmail.com" }
+]
+dependencies = [
+    # 快速的事件循环
+    "uvloop; sys_platform != 'win32' and implementation_name == 'cpython'",
+    # css、xpath解析器
+    "parsel>=1.9.1",
+    # 日志打印
+    "loguru>=0.7.2",
+    # url 解析
+    "furl>=2.1.3",
+    # 假UA
+    "fake-useragent>=1.5.1",
+    # 重试库
+    "tenacity>=8.3.0",
+    # pydantic 模型定义
+    "pydantic[dotenv]>=2.7.3",
+    # pydantic的设置插件
+    "pydantic-settings[yaml, toml]>=2.2.1",
+    # 加解密
+    "pycryptodomex>=3.20.0",
+    # httpx 异步网络请求
+    "httpx[http2]>=0.27.0",
+    # aiohttp 异步网络请求
+    "aiohttp>=3.9.5",
+    # 定时任务
+    "apscheduler>=3.10.4",
+    # 事件与信号
+    "blinker>=1.8.2",
+    "requests>=2.32.3",
+]
+readme = "README.md"
+requires-python = ">= 3.10"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "ruff>=0.4.8",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hssp"]
+
+[[tool.rye.sources]]
+name = "default"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Same as Black.
+line-length = 120
+indent-width = 4
+
+# Assume Python 3.12
+target-version = "py312"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "C", # flake8-comprehensions
+    "B", # flake8-bugbear
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+]
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+
+[tool.rye.scripts]
+#isort_check = { cmd = "isort ./src" }
+#ruff_check = { chain = ["ruff check --fix "] }
+#mypy_check = { cmd = "mypy src" }
+#check = { chain = ["isort_check", "ruff_check", "mypy_check"] }
