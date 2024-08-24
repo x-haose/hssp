@@ -54,11 +54,17 @@ class AiohttpDownloader(DownloaderBase):
 
         resp_headers = dict(response.headers)
         resp_content = await response.read()
-        resp_text = await response.text()
+
+        # 图片等二进制数据无法解码的，直接返回空字符串
+        try:
+            resp_text = await response.text()
+        except UnicodeDecodeError:
+            resp_text = ''
+
         resp_cookies = {name: cookie.value for name, cookie in response.cookies.items()}
         try:
             resp_json = await response.json()
-        except ContentTypeError:
+        except (ContentTypeError, UnicodeDecodeError):
             resp_json = None
 
         return Response(

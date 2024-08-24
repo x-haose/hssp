@@ -61,8 +61,14 @@ class HttpxDownloader(DownloaderBase):
 
         try:
             json_data = response.json()
-        except JSONDecodeError:
+        except (JSONDecodeError, UnicodeDecodeError):
             json_data = None
+
+        # 图片等二进制数据无法解码的，直接返回空字符串
+        try:
+            text_data = response.text
+        except UnicodeDecodeError:
+            text_data = ''
 
         resp_cookies = {cookie.name: cookie.value for cookie in response.cookies.jar}
         return Response(
@@ -72,7 +78,7 @@ class HttpxDownloader(DownloaderBase):
             cookies=resp_cookies,
             client_cookies=self.cookies,
             content=response.content,
-            text=response.text,
+            text=text_data,
             json=json_data,
             request_data=request_data
         )

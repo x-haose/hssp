@@ -57,7 +57,7 @@ class RequestsDownloader(DownloaderBase):
         resp_cookies = dict_from_cookiejar(response.cookies)
         try:
             resp_json = response.json()
-        except JSONDecodeError:
+        except (JSONDecodeError, UnicodeDecodeError):
             resp_json = None
 
         return Response(
