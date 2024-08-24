@@ -1,7 +1,7 @@
 from asyncio import Semaphore
 
 from requests import Session, JSONDecodeError
-from requests.utils import dict_from_cookiejar
+from requests.utils import dict_from_cookiejar, cookiejar_from_dict
 
 from hssp.exception.exception import RequestStateException
 from hssp.models.net import RequestModel, ProxyModel
@@ -17,7 +17,7 @@ class RequestsDownloader(DownloaderBase):
         self.client = Session()
         self.client.verify = False
         self.client.headers = self._default_headers
-        self.client.cookies = self._default_cookies
+        self.client.cookies = cookiejar_from_dict(self._default_cookies)
 
     async def close(self):
         self.client.close()

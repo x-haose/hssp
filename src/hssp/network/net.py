@@ -18,7 +18,7 @@ from tenacity import (
 from hssp.exception.exception import RequestStateException, RequestException
 from hssp.logger.log import hssp_logger
 from hssp.models.net import RequestModel
-from hssp.network.downloader import DownloaderBase, HttpxDownloader
+from hssp.network.downloader import DownloaderBase, HttpxDownloader, RequestsDownloader
 from hssp.network.response import Response
 
 
@@ -37,6 +37,9 @@ class Net:
         """
         self._downloader = downloader_cls(sem, headers, cookies)
         self.logger = hssp_logger.getChild("net")
+
+        if downloader_cls.__name__ == RequestsDownloader.__name__:
+            self.logger.warning(f"不建议使用request下载器，无法发挥异步的性能")
 
         self_id = id(self)
         # 请求重试信号
