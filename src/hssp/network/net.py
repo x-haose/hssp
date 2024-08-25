@@ -20,6 +20,7 @@ from hssp.logger.log import hssp_logger
 from hssp.models.net import RequestModel
 from hssp.network.downloader import DownloaderBase, HttpxDownloader, RequestsDownloader
 from hssp.network.response import Response
+from hssp.settings.settings import settings
 
 
 class Net:
@@ -27,21 +28,21 @@ class Net:
             self,
             downloader_cls: Type[DownloaderBase] = HttpxDownloader,
             sem: Semaphore = None,
-            headers: dict = None,
-            cookies: dict = None,
     ):
         """
         Args:
             downloader_cls: 使用的下载器
             sem: 信号量，控制并发
         """
-        self._downloader = downloader_cls(sem, headers, cookies)
+        self._downloader = downloader_cls(sem, settings.headers, settings.cookies)
         self.logger = hssp_logger.getChild("net")
 
         if downloader_cls.__name__ == RequestsDownloader.__name__:
             self.logger.warning(f"不建议使用request下载器，无法发挥异步的性能")
 
+        # net id
         self_id = id(self)
+
         # 请求重试信号
         self.request_retry_signal = get_signal(f"request_retry##{self_id}")
         # 请求之前信号
@@ -153,6 +154,36 @@ class Net:
 
         return resp
 
+    def _set_default_request(self, data: RequestModel):
+        """
+        使用设置里面的全局设置对情求数据进行设置
+        Args:
+            data: 情求数据
+
+        Returns:
+
+        """
+        if data.user_agent is None:
+            data.user_agent = settings.user_agent
+
+        if data.headers is None:
+            data.headers = settings.headers or {}
+
+        if data.cookies is None:
+            data.cookies = settings.cookies
+
+        if data.timeout is None:
+            data.timeout = settings.timeout
+
+        if data.proxy is None:
+            data.proxy = settings.proxy
+
+        if data.retrys_count is None:
+            data.retrys_count = settings.retrys_count
+
+        if data.retrys_delay is None:
+            data.retrys_delay = settings.retrys_delay
+
     async def request(self, data: RequestModel) -> Response:
         """
         发起异步请求
@@ -162,6 +193,8 @@ class Net:
         Returns:
 
         """
+        self._set_default_request(data)
+
         if data.proxy:
             self._downloader.set_proxy(data.proxy)
 
@@ -169,12 +202,9 @@ class Net:
         if data.user_agent:
             data.headers.update({"User-Agent": data.user_agent})
 
-        # 设置请求头
-        data.headers = data.headers or {}
-
         # 处理 POST form的数据
         # 有些情况form数据的key是相同的，而且还要求顺序，这时使用dict就无法实现
-        # 这里是把form数据收到转为字符串类型
+        # 这里是把form数据手动转为经过编码的字符串类型
         if data.form_data and (isinstance(data.form_data, list) or isinstance(data.form_data, dict)):
             form_data = QueryParams(data.form_data).__str__()
             data.form_data = form_data
@@ -184,8 +214,8 @@ class Net:
             return await self._request(data)
 
         # 设置重试的等候时间
-        if data.retries_delay:
-            wait = wait_fixed(data.retries_delay) + wait_random(0.1, 1)
+        if data.retrys_delay:
+            wait = wait_fixed(data.retrys_delay) + wait_random(0.1, 1)
         else:
             wait = wait_fixed(0)
 

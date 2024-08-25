@@ -14,11 +14,13 @@ class RequestModel(BaseModel):
     url_params: dict[str, Any] | None = Field(title="请求的url数据", default=None)
     form_data: dict[str, Any] | list[tuple[str]] | str | None = Field(title="form请求的数据", default=None)
     json_data: dict[str, Any] | None = Field(title="json请求的数据", default=None)
-    user_agent: dict[str, Any] | None = Field(title="请求UA", default=None)
+    allow_codes: list = Field(title="允许的状态码", default=list(range(200, 400)))
+
+    # 下载这些属性, 默认值为设置中的值
+    user_agent: str | None = Field(title="请求UA", default=None)
     headers: dict[str, Any] | None = Field(title="请求头", default=None)
     cookies: dict[str, Any] | None = Field(title="传递的cookies", default=None)
     timeout: int | None = Field(title="请求超时时间", default=None)
-    allow_codes: list = Field(title="允许的状态码", default=list(range(200, 400)))
-    proxy: ProxyModel | str = Field(title="代理设置", default=None)
-    retrys_count: int = Field(title="重试次数", default=15)
-    retries_delay: int = Field(title="重试延时", default=0)
+    proxy: ProxyModel | str | None = Field(title="代理设置", default=None)
+    retrys_count: int | None = Field(title="重试次数", default=None)
+    retrys_delay: int | None = Field(title="重试延时", default=None)
