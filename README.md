@@ -14,12 +14,22 @@
 - 可选的多种下载器: httpx、aiohttp、requests等
 - 请求前、响应后、重试后监听
 
-## 安装（后续支持）
+## 安装
+
+###
 
 使用 pip 安装 hssp
 
 ```bash
+pip install hssp
+```
 
+###
+
+使用 rye 安装 hssp
+
+```bash
+rye add hssp
 ```
 
 ## 路线图
