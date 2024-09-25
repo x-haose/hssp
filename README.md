@@ -24,6 +24,10 @@
 
 ## 路线图
 
+- 基于fake-useragent的随机UA
+- curl-cff的支持
+- drissionpage的支持
+
 ## 支持
 
 如需支持，请发送电子邮件至 xhrtxh@gmail.com。

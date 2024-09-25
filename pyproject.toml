@@ -1,6 +1,6 @@
 [project]
 name = "hssp"
-version = "0.1.0"
+version = "0.4.0"
 description = "一个简单快速的异步爬虫框架"
 authors = [
     { name = "昊色居士", email = "xhrtxh@gmail.com" }
@@ -28,11 +28,16 @@ dependencies = [
     "httpx[http2]>=0.27.0",
     # aiohttp 异步网络请求
     "aiohttp>=3.9.5",
+    # 同步requests情求库
+    "requests>=2.32.3",
     # 定时任务
     "apscheduler>=3.10.4",
     # 事件与信号
     "blinker>=1.8.2",
-    "requests>=2.32.3",
+    # drissionpage情求库
+    "drissionpage>=4.0.5.6",
+    # curl-cffi情求库
+    "curl-cffi>=0.7.2",
 ]
 readme = "README.md"
 requires-python = ">= 3.10"
