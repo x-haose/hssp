@@ -1,6 +1,6 @@
 [project]
 name = "hssp"
-version = "0.4.4"
+version = "0.4.5"
 keywords = ["爬虫", "异步", "爬虫框架"]
 description = "一个简单快速的异步爬虫框架"
 authors = [
@@ -39,15 +39,15 @@ dependencies = [
     # 重试库
     "tenacity>=8.3.0",
     # pydantic 模型定义
-    "pydantic[dotenv]>=2.7.3",
+    "pydantic[dotenv]>=2.9.2",
     # pydantic的设置插件
-    "pydantic-settings[yaml, toml]>=2.2.1",
+    "pydantic-settings[yaml,toml]>=2.5.2",
     # 加解密
     "pycryptodomex>=3.20.0",
     # httpx 异步网络请求
-    "httpx[http2]>=0.27.0",
+    "httpx[http2]>=0.27.2",
     # aiohttp 异步网络请求
-    "aiohttp>=3.9.5",
+    "aiohttp==3.9.5",
     # 同步requests情求库
     "requests>=2.32.3",
     # 定时任务
