@@ -1,15 +1,14 @@
 from asyncio import Semaphore
 
-from aiohttp import ClientSession, TCPConnector, ClientTimeout, ContentTypeError
+from aiohttp import ClientSession, ClientTimeout, ContentTypeError, TCPConnector
 
 from hssp.exception.exception import RequestStateException
-from hssp.models.net import RequestModel, ProxyModel
+from hssp.models.net import ProxyModel, RequestModel
 from hssp.network.downloader import DownloaderBase
 from hssp.network.response import Response
 
 
 class AiohttpDownloader(DownloaderBase):
-
     def __init__(self, sem: Semaphore, headers: dict = None, cookies=None):
         super().__init__(sem, headers, cookies)
 
@@ -17,14 +16,13 @@ class AiohttpDownloader(DownloaderBase):
             headers=self._default_headers,
             cookies=self._default_cookies,
             connector=TCPConnector(ssl=False),
-            trust_env=True
+            trust_env=True,
         )
 
     async def close(self):
         await self.client.close()
 
-    def set_proxy(self, proxy: ProxyModel | str):
-        ...
+    def set_proxy(self, proxy: ProxyModel | str): ...
 
     @property
     def cookies(self):
@@ -59,7 +57,7 @@ class AiohttpDownloader(DownloaderBase):
         try:
             resp_text = await response.text()
         except UnicodeDecodeError:
-            resp_text = ''
+            resp_text = ""
 
         resp_cookies = {name: cookie.value for name, cookie in response.cookies.items()}
         try:
@@ -76,5 +74,5 @@ class AiohttpDownloader(DownloaderBase):
             content=resp_content,
             text=resp_text,
             json=resp_json,
-            request_data=request_data
+            request_data=request_data,
         )

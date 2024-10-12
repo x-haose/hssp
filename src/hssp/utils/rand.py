@@ -1,31 +1,19 @@
-import random
+import secrets
 import string
 
 
-def rand_str(length: int, style: str | None = None):
+def rand_str(length: int, style: str | None = None) -> str:
     """
     获取固定长度的随机字符串
     Args:
-        style: 格式：默认为大写字母+小写字母+数字
-        length: 长度
+        length: 随机字符串的长度
+        style: 随机字符的格式，默认为大写字母+小写字母+数字
 
     Returns:
-
+        生成的随机字符串
     """
-    if not style:
-        style = string.digits + string.ascii_letters
-    max_length = len(style)
-    if length <= max_length:
-        return "".join(random.sample(style, length))
-
-    text = ""
-    count = length // max_length
-    remainder = length % max_length
-    for _ in range(count):
-        text += rand_str(max_length)
-    if remainder > 0:
-        text += rand_str(remainder)
-    return text
+    style = style if style else string.digits + string.ascii_letters
+    return "".join(secrets.choice(style) for _ in range(length))
 
 
 def random_1():
@@ -34,4 +22,4 @@ def random_1():
     Returns:
 
     """
-    return random.random()
+    return secrets.randbelow(10**6) / 10**6

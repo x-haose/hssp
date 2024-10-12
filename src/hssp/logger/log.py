@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 from loguru import logger
+
 # noinspection PyProtectedMember
 from loguru._defaults import env
 
@@ -12,12 +13,11 @@ from hssp.utils.classes import SingletonMeta
 
 
 class Logger(metaclass=SingletonMeta):
-
     @classmethod
     def init_logger(
-            cls,
-            log_file: str | Path | None = None,
-            hide_types: list[str] | None = None,
+        cls,
+        log_file: str | Path | None = None,
+        hide_types: list[str] | None = None,
     ):
         log_format = env(
             "LOGURU_FORMAT",
@@ -46,7 +46,7 @@ class Logger(metaclass=SingletonMeta):
 
         """
 
-        name = name.replace('.', ' ☞ ')
+        name = name.replace(".", " ☞ ")
         return logging.getLogger(name)
 
 

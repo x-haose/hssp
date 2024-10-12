@@ -1,12 +1,10 @@
 import asyncio
-from asyncio import Semaphore
 
 from hssp.logger.log import Logger, hssp_logger
 from hssp.models.net import RequestModel
 from hssp.network import Net
-from hssp.network.downloader import AiohttpDownloader, HttpxDownloader
+from hssp.network.downloader import AiohttpDownloader
 from hssp.network.response import Response
-from hssp.settings.settings import settings
 
 
 def request_retry(exception):
@@ -36,7 +34,6 @@ def response_after_2(response: Response):
 
 
 async def main():
-    sem = Semaphore(settings.concurrency)
     net = Net(AiohttpDownloader)
     net.request_retry_signal.connect(request_retry)
     net.request_before_signal.connect(request_before)
@@ -49,9 +46,11 @@ async def main():
             "https://httpbin.org/post",
             timeout=3,
             form_data={"aa": 111},
-            request_data=RequestModel(url="", retrys_count=0)
+            request_data=RequestModel(url="", retrys_count=0),
         )
         logger.info(
+            "\n"
+            f"情求头：{resp.request_data.headers}\n"
             f"响应body：{resp.content}\n"
             f"响应json：{resp.json}\n"
             f"响应头：{resp.headers}\n"
@@ -65,7 +64,7 @@ async def main():
     await net.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Logger.init_logger("test-a.log", ["httpcore.http11", "httpcore.connection", "httpx###DEBUG"])
     logger = hssp_logger.getChild("test")
     asyncio.run(main())

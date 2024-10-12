@@ -11,16 +11,16 @@ class Response:
     json: dict
 
     def __init__(
-            self,
-            url: str,
-            status_code: int,
-            headers: dict,
-            cookies: dict,
-            client_cookies: dict,
-            content: bytes,
-            text: str,
-            json: dict,
-            request_data: RequestModel,
+        self,
+        url: str,
+        status_code: int,
+        headers: dict,
+        cookies: dict,
+        client_cookies: dict,
+        content: bytes,
+        text: str,
+        json: dict,
+        request_data: RequestModel,
     ):
         self.request_data = request_data
         self.status_code = status_code

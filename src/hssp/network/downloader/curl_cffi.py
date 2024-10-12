@@ -1,18 +1,16 @@
-import sys
 import asyncio
 from json import JSONDecodeError
 
-from curl_cffi.requests import AsyncSession
 from curl_cffi.const import CurlHttpVersion
+from curl_cffi.requests import AsyncSession
 
 from hssp.exception.exception import RequestStateException
-from hssp.models.net import RequestModel, ProxyModel
+from hssp.models.net import ProxyModel, RequestModel
 from hssp.network.downloader import DownloaderBase
 from hssp.network.response import Response
 
 
 class CurlCffiDownloader(DownloaderBase):
-
     def __init__(self, sem: asyncio.Semaphore, headers: dict = None, cookies=None):
         super().__init__(sem, headers, cookies)
 
@@ -21,7 +19,7 @@ class CurlCffiDownloader(DownloaderBase):
             headers=self._default_headers,
             cookies=self._default_cookies,
             impersonate="chrome110",
-            http_version=CurlHttpVersion.V2_0
+            http_version=CurlHttpVersion.V2_0,
         )
 
     async def close(self):
@@ -31,8 +29,7 @@ class CurlCffiDownloader(DownloaderBase):
     def cookies(self):
         return self.client.cookies.get_dict()
 
-    def set_proxy(self, proxy: ProxyModel | str):
-        ...
+    def set_proxy(self, proxy: ProxyModel | str): ...
 
     async def _download(self, request_data: RequestModel) -> Response:
         if isinstance(request_data.proxy, ProxyModel):
@@ -50,7 +47,7 @@ class CurlCffiDownloader(DownloaderBase):
             cookies=request_data.cookies,
             headers=request_data.headers,
             proxies=proxies,
-            timeout=request_data.timeout
+            timeout=request_data.timeout,
         )
 
         if not response.ok:
@@ -74,5 +71,5 @@ class CurlCffiDownloader(DownloaderBase):
             content=resp_content,
             text=resp_text,
             json=resp_json,
-            request_data=request_data
+            request_data=request_data,
         )

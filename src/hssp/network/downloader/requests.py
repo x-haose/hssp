@@ -1,16 +1,15 @@
 from asyncio import Semaphore
 
-from requests import Session, JSONDecodeError
-from requests.utils import dict_from_cookiejar, cookiejar_from_dict
+from requests import JSONDecodeError, Session
+from requests.utils import cookiejar_from_dict, dict_from_cookiejar
 
 from hssp.exception.exception import RequestStateException
-from hssp.models.net import RequestModel, ProxyModel
+from hssp.models.net import ProxyModel, RequestModel
 from hssp.network.downloader import DownloaderBase
 from hssp.network.response import Response
 
 
 class RequestsDownloader(DownloaderBase):
-
     def __init__(self, sem: Semaphore, headers: dict = None, cookies=None):
         super().__init__(sem, headers, cookies)
 
@@ -22,8 +21,7 @@ class RequestsDownloader(DownloaderBase):
     async def close(self):
         self.client.close()
 
-    def set_proxy(self, proxy: ProxyModel | str):
-        ...
+    def set_proxy(self, proxy: ProxyModel | str): ...
 
     @property
     def cookies(self):
@@ -69,5 +67,5 @@ class RequestsDownloader(DownloaderBase):
             content=resp_content,
             text=resp_text,
             json=resp_json,
-            request_data=request_data
+            request_data=request_data,
         )

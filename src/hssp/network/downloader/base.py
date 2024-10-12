@@ -1,12 +1,11 @@
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from asyncio import Semaphore
 
-from hssp.models.net import RequestModel, ProxyModel
+from hssp.models.net import ProxyModel, RequestModel
 from hssp.network.response import Response
 
 
 class DownloaderBase(ABC):
-
     def __init__(self, sem: Semaphore, headers: dict = None, cookies=None):
         """
         Args:

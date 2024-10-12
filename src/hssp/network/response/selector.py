@@ -1,5 +1,4 @@
 from parsel import Selector as BaseSelector
-
 from parsel import SelectorList as BaseSelectorList
 
 
@@ -14,11 +13,11 @@ class SelectorList(BaseSelectorList):
         return value
 
     def getall(self, is_url=False):
-        result = super(SelectorList, self).getall()
+        result = super().getall()
         return [self.proc_result(x, domain=self.domain, is_url=is_url) for x in result]
 
     def get(self, default=None, is_url=False):
-        result = super(SelectorList, self).get(default=default)
+        result = super().get(default=default)
         result = self.proc_result(result, self.domain, is_url)
         return result
 
@@ -30,11 +29,11 @@ class Selector(BaseSelector):
         super().__init__(*args, **kwargs)
 
     def css(self, query, domain=None):
-        result = super(Selector, self).css(query)
+        result = super().css(query)
         result.domain = domain
         return result
 
     def xpath(self, query, namespaces=None, domain=None, **kwargs):
-        result = super(Selector, self).xpath(query, namespaces=namespaces, **kwargs)
+        result = super().xpath(query, namespaces=namespaces, **kwargs)
         result.domain = domain
         return result

@@ -1,7 +1,7 @@
 from abc import ABCMeta
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Any, Tuple, Type
+from typing import Any
 
 from pydantic_settings import (
     BaseSettings,
@@ -49,7 +49,7 @@ class SettingsBase(BaseSettings, metaclass=ABCMeta):
     """
 
     model_config = SettingsConfigDict(
-        extra='allow',
+        extra="allow",
         env_file_encoding="utf-8",
         env_nested_delimiter="__",
         env_file=(Path.cwd() / "configs").absolute() / ".env",
@@ -58,12 +58,12 @@ class SettingsBase(BaseSettings, metaclass=ABCMeta):
     @classmethod
     def settings_customise_sources(
         cls,
-        settings_cls: Type[BaseSettings],
+        settings_cls: type[BaseSettings],
         init_settings: PydanticBaseSettingsSource,
         env_settings: PydanticBaseSettingsSource,
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
-    ) -> Tuple[PydanticBaseSettingsSource, ...]:
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
         """
         自定义配置来源
         Args:

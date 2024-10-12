@@ -1,11 +1,11 @@
 import functools
 from asyncio import Semaphore
 from inspect import iscoroutinefunction
-from typing import Type, Any
+from typing import Any
 
-from httpx import QueryParams
-from blinker import signal as get_signal
 from blinker import Signal
+from blinker import signal as get_signal
+from httpx import QueryParams
 from tenacity import (
     AsyncRetrying,
     Future,
@@ -15,7 +15,7 @@ from tenacity import (
     wait_random,
 )
 
-from hssp.exception.exception import RequestStateException, RequestException
+from hssp.exception.exception import RequestException, RequestStateException
 from hssp.logger.log import hssp_logger
 from hssp.models.net import RequestModel
 from hssp.network.downloader import DownloaderBase, HttpxDownloader, RequestsDownloader
@@ -25,9 +25,9 @@ from hssp.settings.settings import settings
 
 class Net:
     def __init__(
-            self,
-            downloader_cls: Type[DownloaderBase] = HttpxDownloader,
-            sem: Semaphore = None,
+        self,
+        downloader_cls: type[DownloaderBase] = HttpxDownloader,
+        sem: Semaphore = None,
     ):
         """
         Args:
@@ -38,7 +38,7 @@ class Net:
         self.logger = hssp_logger.getChild("net")
 
         if downloader_cls.__name__ == RequestsDownloader.__name__:
-            self.logger.warning(f"不建议使用request下载器，无法发挥异步的性能")
+            self.logger.warning("不建议使用request下载器，无法发挥异步的性能")
 
         # net id
         self_id = id(self)
@@ -129,7 +129,7 @@ class Net:
             返回响应
         """
         # 执行请求中间件
-        async for receiver, result in self._send_signal(self.request_before_signal, data):
+        async for _receiver, result in self._send_signal(self.request_before_signal, data):
             if result and isinstance(result, RequestModel):
                 data = result
             if result and isinstance(result, Response):
@@ -148,7 +148,7 @@ class Net:
         resp = await self._downloader.download(data)
 
         # 执行响应中间件
-        async for receiver, result in self._send_signal(self.response_after_signal, resp):
+        async for _receiver, result in self._send_signal(self.response_after_signal, resp):
             if result and isinstance(result, Response):
                 return result
 
@@ -205,19 +205,16 @@ class Net:
         # 处理 POST form的数据
         # 有些情况form数据的key是相同的，而且还要求顺序，这时使用dict就无法实现
         # 这里是把form数据手动转为经过编码的字符串类型
-        if data.form_data and (isinstance(data.form_data, list) or isinstance(data.form_data, dict)):
+        if data.form_data and isinstance(data.form_data, list | dict):
             form_data = QueryParams(data.form_data).__str__()
             data.form_data = form_data
-            data.headers['Content-Type'] = "application/x-www-form-urlencoded"
+            data.headers["Content-Type"] = "application/x-www-form-urlencoded"
 
         if data.retrys_count < 1:
             return await self._request(data)
 
         # 设置重试的等候时间
-        if data.retrys_delay:
-            wait = wait_fixed(data.retrys_delay) + wait_random(0.1, 1)
-        else:
-            wait = wait_fixed(0)
+        wait = wait_fixed(data.retrys_delay) + wait_random(0.1, 1) if data.retrys_delay else wait_fixed(0)
 
         # 异步重试
         retry_resp = AsyncRetrying(
@@ -230,14 +227,14 @@ class Net:
         return await retry_resp.wraps(functools.partial(self._request, data))()
 
     async def get(
-            self,
-            url: str,
-            params: dict = None,
-            user_agent: str = None,
-            headers: dict = None,
-            cookies: dict = None,
-            timeout: float = None,
-            request_data: RequestModel = None,
+        self,
+        url: str,
+        params: dict = None,
+        user_agent: str = None,
+        headers: dict = None,
+        cookies: dict = None,
+        timeout: float = None,
+        request_data: RequestModel = None,
     ) -> Response:
         """
         发起GET请求
@@ -265,16 +262,16 @@ class Net:
         return await self.request(request_data)
 
     async def post(
-            self,
-            url: str,
-            params: dict = None,
-            json_data: dict = None,
-            form_data: dict[str, Any] | list[tuple[str]] | None = None,
-            user_agent: str = None,
-            headers: dict = None,
-            cookies: dict = None,
-            timeout: float = None,
-            request_data: RequestModel = None,
+        self,
+        url: str,
+        params: dict = None,
+        json_data: dict = None,
+        form_data: dict[str, Any] | list[tuple[str]] | None = None,
+        user_agent: str = None,
+        headers: dict = None,
+        cookies: dict = None,
+        timeout: float = None,
+        request_data: RequestModel = None,
     ) -> Response:
         """
         发起GET请求

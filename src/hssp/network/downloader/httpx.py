@@ -4,13 +4,12 @@ from json import JSONDecodeError
 from httpx import AsyncClient
 
 from hssp.exception.exception import RequestStateException
-from hssp.models.net import RequestModel, ProxyModel
+from hssp.models.net import ProxyModel, RequestModel
 from hssp.network.downloader import DownloaderBase
 from hssp.network.response import Response
 
 
 class HttpxDownloader(DownloaderBase):
-
     def __init__(self, sem: Semaphore, headers: dict = None, cookies=None):
         super().__init__(sem, headers, cookies)
 
@@ -32,12 +31,12 @@ class HttpxDownloader(DownloaderBase):
         proxy_data = {}
         if isinstance(proxy, ProxyModel):
             if proxy.http:
-                proxy_data['http://'] = proxy.http
+                proxy_data["http://"] = proxy.http
             if proxy.https:
-                proxy_data['https://'] = proxy.https
+                proxy_data["https://"] = proxy.https
         elif isinstance(proxy, str):
-            proxy_data['http://'] = proxy
-            proxy_data['https://'] = proxy
+            proxy_data["http://"] = proxy
+            proxy_data["https://"] = proxy
 
         proxy_data = proxy_data or None
         self.client = AsyncClient(
@@ -68,7 +67,7 @@ class HttpxDownloader(DownloaderBase):
         try:
             text_data = response.text
         except UnicodeDecodeError:
-            text_data = ''
+            text_data = ""
 
         resp_cookies = {cookie.name: cookie.value for cookie in response.cookies.jar}
         return Response(
@@ -80,5 +79,5 @@ class HttpxDownloader(DownloaderBase):
             content=response.content,
             text=text_data,
             json=json_data,
-            request_data=request_data
+            request_data=request_data,
         )
