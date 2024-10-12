@@ -69,12 +69,6 @@ documentation = "https://github.com/x-haose/hssp"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.bandit]
-skips = [
-    "B501",
-    "B113"
-]
-
 [tool.rye]
 managed = true
 dev-dependencies = [
@@ -93,6 +87,12 @@ packages = ["src/hssp"]
 [[tool.rye.sources]]
 name = "default"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+
+[tool.bandit]
+skips = [
+    "B501",
+    "B113"
+]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
