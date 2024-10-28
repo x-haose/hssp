@@ -1,9 +1,9 @@
 import asyncio
 
+from hssp import Net
 from hssp.logger.log import Logger, hssp_logger
 from hssp.models.net import RequestModel
-from hssp.network import Net
-from hssp.network.downloader import AiohttpDownloader
+from hssp.network.downloader import HttpxDownloader
 from hssp.network.response import Response
 
 
@@ -34,7 +34,7 @@ def response_after_2(response: Response):
 
 
 async def main():
-    net = Net(AiohttpDownloader)
+    net = Net(HttpxDownloader)
     net.request_retry_signal.connect(request_retry)
     net.request_before_signal.connect(request_before)
     net.request_before_signal.connect(request_before_2)

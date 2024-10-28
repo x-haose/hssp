@@ -17,8 +17,9 @@ from tenacity import (
 
 from hssp.exception.exception import RequestException, RequestStateException
 from hssp.logger.log import hssp_logger
-from hssp.models.net import RequestModel
-from hssp.network.downloader import DownloaderBase, HttpxDownloader, RequestsDownloader
+from hssp.models.net import ProxyModel, RequestModel
+from hssp.network.downloader import HttpxDownloader, RequestsDownloader
+from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
 from hssp.settings.settings import settings
 
@@ -234,6 +235,7 @@ class Net:
         headers: dict = None,
         cookies: dict = None,
         timeout: float = None,
+        proxy: ProxyModel | str | None = None,
         request_data: RequestModel = None,
     ) -> Response:
         """
@@ -245,6 +247,7 @@ class Net:
             headers: 请求头
             cookies: cookies
             timeout: 超时时间
+            proxy: 代理设置
             request_data: 其他的请求参数
 
         Returns:
@@ -258,6 +261,7 @@ class Net:
         request_data.headers = headers
         request_data.cookies = cookies
         request_data.timeout = timeout
+        request_data.proxy = proxy
 
         return await self.request(request_data)
 
@@ -271,6 +275,7 @@ class Net:
         headers: dict = None,
         cookies: dict = None,
         timeout: float = None,
+        proxy: ProxyModel | str | None = None,
         request_data: RequestModel = None,
     ) -> Response:
         """
@@ -284,6 +289,7 @@ class Net:
             headers: 请求头
             cookies: cookies
             timeout: 超时时间
+            proxy: 代理设置
             request_data: 其他的请求参数
 
         Returns:
@@ -299,5 +305,6 @@ class Net:
         request_data.timeout = timeout
         request_data.json_data = json_data
         request_data.form_data = form_data
+        request_data.proxy = proxy
 
         return await self.request(request_data)

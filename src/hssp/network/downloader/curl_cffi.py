@@ -6,7 +6,7 @@ from curl_cffi.requests import AsyncSession
 
 from hssp.exception.exception import RequestStateException
 from hssp.models.net import ProxyModel, RequestModel
-from hssp.network.downloader import DownloaderBase
+from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
 
 

@@ -5,7 +5,7 @@ from requests.utils import cookiejar_from_dict, dict_from_cookiejar
 
 from hssp.exception.exception import RequestStateException
 from hssp.models.net import ProxyModel, RequestModel
-from hssp.network.downloader import DownloaderBase
+from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
 
 
