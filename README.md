@@ -16,9 +16,10 @@
 
 ## 计划
 
+- 在情求过程中临时更换下载器：比如net初始化时使用的是httpx下载器，其中一个情求要临时切换至 `DrissionPage`, 其他的依旧是httpx
 - 支持 `DrissionPage` 浏览器渲染的下载器
 - 支持 `playwright` 浏览器渲染的下载器
-- 在情求过程中临时更换下载器：比如net初始化时使用的是httpx下载器，其中一个情求要临时切换至 `DrissionPage`, 其他的依旧是httpx
+- 针对curl-cffi使用更多了配置项及自定义项
 
 ## 安装
 
