@@ -11,8 +11,14 @@
 - 使用scrapy框架的选择器`parsel`作为内置网页选择器
 - 基于tenacity的自动异常重试
 - 基于fake-useragent的可选随机UA
-- 可选的多种下载器: httpx、aiohttp、requests等
+- 可选的多种下载器: httpx、aiohttp、requests、curl-cffi等
 - 请求前、响应后、重试后监听
+
+## 计划
+
+- 支持 `DrissionPage` 浏览器渲染的下载器
+- 支持 `playwright` 浏览器渲染的下载器
+- 在情求过程中临时更换下载器：比如net初始化时使用的是httpx下载器，其中一个情求要临时切换至 `DrissionPage`, 其他的依旧是httpx
 
 ## 安装
 
