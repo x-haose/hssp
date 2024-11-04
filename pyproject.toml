@@ -1,6 +1,6 @@
 [project]
 name = "hssp"
-version = "0.4.6"
+version = "0.4.7"
 keywords = ["爬虫", "异步", "爬虫框架"]
 description = "一个简单快速的异步爬虫框架"
 authors = [

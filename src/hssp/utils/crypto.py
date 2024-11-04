@@ -6,7 +6,7 @@ from Cryptodome.Util.Padding import pad, unpad
 
 def encrypt_aes_256_cbc(data: bytes, key: bytes, iv: bytes) -> bytes:
     """
-    aes_256加密 不填充
+    aes_256_cbc加密 不填充
     Args:
         data: 加密的数据
         key: key
@@ -23,7 +23,7 @@ def encrypt_aes_256_cbc(data: bytes, key: bytes, iv: bytes) -> bytes:
 
 def decrypt_aes_256_cbc(data: bytes, key: bytes, iv: bytes) -> bytes:
     """
-    aes_256解密 不填充
+    aes_256_cbc解密 不填充
     Args:
         data: 数据
         key: key
@@ -37,9 +37,40 @@ def decrypt_aes_256_cbc(data: bytes, key: bytes, iv: bytes) -> bytes:
     return ciphertext
 
 
+def encrypt_aes_256_ecb(data: bytes, key: bytes) -> bytes:
+    """
+    aes_256_ecb加密 不填充
+    Args:
+        data: 加密的数据
+        key: key
+
+    Returns:
+
+    """
+
+    cipher = AES.new(key, AES.MODE_ECB)
+    ciphertext = cipher.encrypt(data)
+    return ciphertext
+
+
+def decrypt_aes_256_ecb(data: bytes, key: bytes) -> bytes:
+    """
+    aes_256_ecb解密 不填充
+    Args:
+        data: 数据
+        key: key
+
+    Returns:
+
+    """
+    cipher = AES.new(key, AES.MODE_ECB)
+    ciphertext = cipher.decrypt(data)
+    return ciphertext
+
+
 def encrypt_aes_256_cbc_pad7(data: bytes, key: bytes, iv: bytes) -> bytes:
     """
-    aes_256加密 pad7填充
+    aes_256_cbc加密 pad7填充
     Args:
         data: 加密的数据
         key: key
@@ -55,7 +86,7 @@ def encrypt_aes_256_cbc_pad7(data: bytes, key: bytes, iv: bytes) -> bytes:
 
 def decrypt_aes_256_cbc_pad7(data: bytes, key: bytes, iv: bytes) -> bytes:
     """
-    aes_256解密 pad7填充
+    aes_256_cbc解密 pad7填充
     Args:
         data: 数据
         key: key
@@ -65,6 +96,35 @@ def decrypt_aes_256_cbc_pad7(data: bytes, key: bytes, iv: bytes) -> bytes:
 
     """
     data = decrypt_aes_256_cbc(data, key, iv)
+    return unpad(data, AES.block_size)
+
+
+def encrypt_aes_256_ecb_pad7(data: bytes, key: bytes) -> bytes:
+    """
+    aes_256_ecb加密 pad7填充
+    Args:
+        data: 加密的数据
+        key: key
+
+    Returns:
+
+    """
+
+    data = pad(data, 16)
+    return encrypt_aes_256_ecb(data, key)
+
+
+def decrypt_aes_256_ecb_pad7(data: bytes, key: bytes) -> bytes:
+    """
+    aes_256_ecb解密 pad7填充
+    Args:
+        data: 数据
+        key: key
+
+    Returns:
+
+    """
+    data = decrypt_aes_256_ecb(data, key)
     return unpad(data, AES.block_size)
 
 
