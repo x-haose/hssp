@@ -20,6 +20,8 @@ anyio==4.4.0
     # via httpx
 apscheduler==3.10.4
     # via hssp
+async-timeout==4.0.3
+    # via aiohttp
 attrs==23.2.0
     # via aiohttp
 blinker==1.8.2
@@ -35,9 +37,6 @@ charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via drissionpage
-colorama==0.4.6
-    # via click
-    # via loguru
 cssselect==1.2.0
     # via drissionpage
     # via parsel
@@ -51,6 +50,8 @@ drissionpage==4.0.5.6
     # via hssp
 et-xmlfile==1.1.0
     # via openpyxl
+exceptiongroup==1.2.2
+    # via anyio
 fake-useragent==1.5.1
     # via hssp
 filelock==3.16.0
@@ -137,20 +138,19 @@ tldextract==5.1.2
 tomli==2.0.1
     # via pydantic-settings
 typing-extensions==4.12.2
+    # via anyio
     # via curl-cffi
     # via pydantic
     # via pydantic-core
-tzdata==2024.1
-    # via tzlocal
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.2
     # via requests
+uvloop==0.21.0
+    # via hssp
 w3lib==2.1.2
     # via parsel
 websocket-client==1.8.0
     # via drissionpage
-win32-setctime==1.1.0
-    # via loguru
 yarl==1.13.0
     # via aiohttp

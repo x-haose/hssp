@@ -5,6 +5,7 @@ from typing import Any
 
 from blinker import Signal
 from blinker import signal as get_signal
+from fake_useragent import FakeUserAgent
 from httpx import QueryParams
 from tenacity import (
     AsyncRetrying,
@@ -26,9 +27,9 @@ from hssp.settings.settings import settings
 
 class Net:
     def __init__(
-        self,
-        downloader_cls: type[DownloaderBase] = HttpxDownloader,
-        sem: Semaphore = None,
+            self,
+            downloader_cls: type[DownloaderBase] = HttpxDownloader,
+            sem: Semaphore = None,
     ):
         """
         Args:
@@ -155,6 +156,21 @@ class Net:
 
         return resp
 
+    def _set_fake_user_agent(self, data: RequestModel):
+        """
+        如果传入的UA是random，则获取一个假的UA
+        Args:
+            data: 请求数据
+        """
+        fake_user_agent_attrs = [
+            "random", "chrome", "googlechrome", "edge", "firefox", "ff", "safari"
+        ]
+        if data.user_agent not in fake_user_agent_attrs:
+            return
+
+        fake_user_agent = FakeUserAgent()
+        data.user_agent = getattr(fake_user_agent, data.user_agent)
+
     def _set_default_request(self, data: RequestModel):
         """
         使用设置里面的全局设置对情求数据进行设置
@@ -199,6 +215,9 @@ class Net:
         if data.proxy:
             self._downloader.set_proxy(data.proxy)
 
+        # 设置假UA
+        self._set_fake_user_agent(data)
+
         # 更新UA
         if data.user_agent:
             data.headers.update({"User-Agent": data.user_agent})
@@ -228,15 +247,15 @@ class Net:
         return await retry_resp.wraps(functools.partial(self._request, data))()
 
     async def get(
-        self,
-        url: str,
-        params: dict = None,
-        user_agent: str = None,
-        headers: dict = None,
-        cookies: dict = None,
-        timeout: float = None,
-        proxy: ProxyModel | str | None = None,
-        request_data: RequestModel = None,
+            self,
+            url: str,
+            params: dict = None,
+            user_agent: str = None,
+            headers: dict = None,
+            cookies: dict = None,
+            timeout: float = None,
+            proxy: ProxyModel | str | None = None,
+            request_data: RequestModel = None,
     ) -> Response:
         """
         发起GET请求
@@ -266,17 +285,17 @@ class Net:
         return await self.request(request_data)
 
     async def post(
-        self,
-        url: str,
-        params: dict = None,
-        json_data: dict = None,
-        form_data: dict[str, Any] | list[tuple[str]] | None = None,
-        user_agent: str = None,
-        headers: dict = None,
-        cookies: dict = None,
-        timeout: float = None,
-        proxy: ProxyModel | str | None = None,
-        request_data: RequestModel = None,
+            self,
+            url: str,
+            params: dict = None,
+            json_data: dict = None,
+            form_data: dict[str, Any] | list[tuple[str]] | None = None,
+            user_agent: str = None,
+            headers: dict = None,
+            cookies: dict = None,
+            timeout: float = None,
+            proxy: ProxyModel | str | None = None,
+            request_data: RequestModel = None,
     ) -> Response:
         """
         发起GET请求
