@@ -158,7 +158,7 @@ class Net:
 
     def _set_fake_user_agent(self, data: RequestModel):
         """
-        如果传入的UA是random，则获取一个假的UA
+        如果传入的UA是符合FakeUserAgent属性的，则使用FakeUserAgent获取一个假的UA
         Args:
             data: 请求数据
         """
