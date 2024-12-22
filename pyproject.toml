@@ -73,6 +73,7 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "pre-commit>=4.0.1",
+    "twine>=6.0.1",
 ]
 include = [
     "src/hssp/"
@@ -165,8 +166,8 @@ unfixable = []
 
 
 [tool.rye.scripts]
-publish_testpypi = { cmd = "rye publish --repository testpypi --repository-url https://test.pypi.org/legacy/" }
-publish_pypi = { cmd = "rye publish" }
+publish_testpypi = { cmd = "rye run twine upload -r testpypi dist/*" }
+publish_pypi = { cmd = "rye run twine upload dist/*" }
 sb = { cmd = "rye build --clean" }
 spt = { chain = ["sb", "publish_testpypi"] }
 sp = { chain = ["sb", "publish_pypi"] }
