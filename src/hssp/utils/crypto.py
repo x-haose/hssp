@@ -1,6 +1,6 @@
 from hashlib import md5, sha256
 
-from Cryptodome.Cipher import AES
+from Cryptodome.Cipher import AES, ARC4
 from Cryptodome.Util.Padding import pad, unpad
 
 
@@ -162,3 +162,31 @@ def sha256_hash(data: bytes | str, result_type: str = "hex"):
         return result.hexdigest()
     else:
         return result.digest()
+
+
+def rc4_encrypt(data: bytes, key: bytes) -> bytes:
+    """
+    RC4 加密
+    Args:
+        data: 数据
+        key: key
+
+    Returns:
+
+    """
+    rc4 = ARC4.new(key)
+    return rc4.encrypt(data)
+
+
+def rc4_decrypt(data: bytes, key: bytes) -> bytes:
+    """
+    RC4 解密
+    Args:
+        data: 数据
+        key: key
+
+    Returns:
+
+    """
+    rc4 = ARC4.new(key)
+    return rc4.decrypt(data)

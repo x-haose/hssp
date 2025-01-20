@@ -1,14 +1,34 @@
+from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
 class ProxyModel(BaseModel):
+    """
+    代理设置模型
+    """
+
     http: str = ""
     https: str = ""
 
 
+class DownloaderEnum(Enum):
+    """
+    下载器的枚举
+    """
+
+    AIOHTTP = "aiohttp"
+    HTTPX = "httpx"
+    REQUESTS = "requests"
+    CURL_CFFI = "curl_cffi"
+
+
 class RequestModel(BaseModel):
+    """
+    请求模型
+    """
+
     url: str = Field(title="请求的地址")
     method: str = Field(title="请求的方法", default="GET")
     url_params: dict[str, Any] | None = Field(title="请求的url数据", default=None)

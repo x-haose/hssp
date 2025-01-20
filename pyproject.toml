@@ -1,6 +1,6 @@
 [project]
 name = "hssp"
-version = "0.4.8"
+version = "0.4.9"
 keywords = ["爬虫", "异步", "爬虫框架"]
 description = "一个简单快速的异步爬虫框架"
 authors = [
@@ -92,7 +92,8 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 [tool.bandit]
 skips = [
     "B501",
-    "B113"
+    "B113",
+    "B304"
 ]
 
 [tool.ruff]

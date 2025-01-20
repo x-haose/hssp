@@ -27,9 +27,9 @@ from hssp.settings.settings import settings
 
 class Net:
     def __init__(
-            self,
-            downloader_cls: type[DownloaderBase] = HttpxDownloader,
-            sem: Semaphore = None,
+        self,
+        downloader_cls: type[DownloaderBase] = HttpxDownloader,
+        sem: Semaphore = None,
     ):
         """
         Args:
@@ -162,9 +162,7 @@ class Net:
         Args:
             data: 请求数据
         """
-        fake_user_agent_attrs = [
-            "random", "chrome", "googlechrome", "edge", "firefox", "ff", "safari"
-        ]
+        fake_user_agent_attrs = ["random", "chrome", "googlechrome", "edge", "firefox", "ff", "safari"]
         if data.user_agent not in fake_user_agent_attrs:
             return
 
@@ -247,15 +245,15 @@ class Net:
         return await retry_resp.wraps(functools.partial(self._request, data))()
 
     async def get(
-            self,
-            url: str,
-            params: dict = None,
-            user_agent: str = None,
-            headers: dict = None,
-            cookies: dict = None,
-            timeout: float = None,
-            proxy: ProxyModel | str | None = None,
-            request_data: RequestModel = None,
+        self,
+        url: str,
+        params: dict = None,
+        user_agent: str = None,
+        headers: dict = None,
+        cookies: dict = None,
+        timeout: float = None,
+        proxy: ProxyModel | str | None = None,
+        request_data: RequestModel = None,
     ) -> Response:
         """
         发起GET请求
@@ -285,17 +283,17 @@ class Net:
         return await self.request(request_data)
 
     async def post(
-            self,
-            url: str,
-            params: dict = None,
-            json_data: dict = None,
-            form_data: dict[str, Any] | list[tuple[str]] | None = None,
-            user_agent: str = None,
-            headers: dict = None,
-            cookies: dict = None,
-            timeout: float = None,
-            proxy: ProxyModel | str | None = None,
-            request_data: RequestModel = None,
+        self,
+        url: str,
+        params: dict = None,
+        json_data: dict = None,
+        form_data: dict[str, Any] | list[tuple[str]] | None = None,
+        user_agent: str = None,
+        headers: dict = None,
+        cookies: dict = None,
+        timeout: float = None,
+        proxy: ProxyModel | str | None = None,
+        request_data: RequestModel = None,
     ) -> Response:
         """
         发起GET请求
