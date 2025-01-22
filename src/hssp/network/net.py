@@ -287,7 +287,7 @@ class Net:
         url: str,
         params: dict = None,
         json_data: dict = None,
-        form_data: dict[str, Any] | list[tuple[str]] | None = None,
+        form_data: dict[str, Any] | list[tuple[str]] | str | bytes | None = None,
         user_agent: str = None,
         headers: dict = None,
         cookies: dict = None,
@@ -296,7 +296,7 @@ class Net:
         request_data: RequestModel = None,
     ) -> Response:
         """
-        发起GET请求
+        发起POST请求
         Args:
             url: 地址
             params: url参数
