@@ -1,4 +1,4 @@
-from hashlib import md5, sha256
+from hashlib import md5, sha1, sha256
 
 from Cryptodome.Cipher import AES, ARC4
 from Cryptodome.Util.Padding import pad, unpad
@@ -139,7 +139,25 @@ def md5_hash(data: bytes | str, result_type: str = "hex"):
         返回经过md5哈希后的值
     """
     data = data if isinstance(data, bytes) else data.encode("utf-8")
-    result = md5(data, usedforsecurity=False)
+    result = md5(data, usedforsecurity=False)  # type: ignore
+    if result_type == "hex":
+        return result.hexdigest()
+    else:
+        return result.digest()
+
+
+def sha1_hash(data: bytes | str, result_type: str = "hex"):
+    """
+    sha1 hash
+    Args:
+        data: 数据，字节数据或字符串，字符串或使用utf8编码为字节
+        result_type: 返回类型，默认为16进制字符串，bytes为字节
+
+    Returns:
+        返回经过sha256哈希后的值
+    """
+    data = data if isinstance(data, bytes) else data.encode("utf-8")
+    result = sha1(data)  # type: ignore  # nosec
     if result_type == "hex":
         return result.hexdigest()
     else:
@@ -157,7 +175,7 @@ def sha256_hash(data: bytes | str, result_type: str = "hex"):
         返回经过sha256哈希后的值
     """
     data = data if isinstance(data, bytes) else data.encode("utf-8")
-    result = sha256(data)
+    result = sha256(data)  # type: ignore
     if result_type == "hex":
         return result.hexdigest()
     else:
