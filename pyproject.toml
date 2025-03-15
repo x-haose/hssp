@@ -1,6 +1,6 @@
 [project]
 name = "hssp"
-version = "0.4.12"
+version = "0.4.13"
 keywords = ["爬虫", "异步", "爬虫框架"]
 description = "一个简单快速的异步爬虫框架"
 authors = [
@@ -49,7 +49,7 @@ dependencies = [
     # aiohttp 异步网络请求
     "aiohttp==3.9.5",
     # 同步requests情求库
-    "requests>=2.32.3",
+    "requests>=2.31.0",
     # 定时任务
     "apscheduler>=3.10.4",
     # 事件与信号
