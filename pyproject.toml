@@ -45,7 +45,7 @@ dependencies = [
     # 加解密
     "pycryptodomex>=3.20.0",
     # httpx 异步网络请求
-    "httpx[http2]>=0.27.2",
+    "httpx[http2,socks]>=0.28.1",
     # aiohttp 异步网络请求
     "aiohttp==3.9.5",
     # 同步requests情求库

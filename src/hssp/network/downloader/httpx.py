@@ -1,7 +1,7 @@
 from asyncio import Semaphore
 from json import JSONDecodeError
 
-from httpx import AsyncClient
+from httpx import AsyncClient, AsyncHTTPTransport
 
 from hssp.exception.exception import RequestStateException
 from hssp.models.net import ProxyModel, RequestModel
@@ -28,19 +28,20 @@ class HttpxDownloader(DownloaderBase):
         return {cookie.name: cookie.value for cookie in self.client.cookies.jar}
 
     def set_proxy(self, proxy: ProxyModel | str):
-        proxy_data = {}
+        proxy_data: None | dict[str, AsyncHTTPTransport] = None
         if isinstance(proxy, ProxyModel):
             if proxy.http:
-                proxy_data["http://"] = proxy.http
+                proxy_data["http://"] = AsyncHTTPTransport(proxy=proxy.http)
             if proxy.https:
-                proxy_data["https://"] = proxy.https
+                proxy_data["https://"] = AsyncHTTPTransport(proxy=proxy.https)
         elif isinstance(proxy, str):
-            proxy_data["http://"] = proxy
-            proxy_data["https://"] = proxy
+            proxy_data = {
+                "http://": AsyncHTTPTransport(proxy=proxy, verify=False),
+                "https://": AsyncHTTPTransport(proxy=proxy, verify=False),
+            }
 
-        proxy_data = proxy_data or None
         self.client = AsyncClient(
-            headers=self.client.headers, cookies=self.client.cookies, proxies=proxy_data, verify=False
+            headers=self.client.headers, cookies=self.client.cookies, mounts=proxy_data, verify=False
         )
 
     async def _download(self, request_data: RequestModel) -> Response:
