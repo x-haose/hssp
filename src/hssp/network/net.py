@@ -18,7 +18,7 @@ from tenacity import (
 
 from hssp.exception.exception import RequestException, RequestStateException
 from hssp.logger.log import hssp_logger
-from hssp.models.net import ProxyModel, RequestModel
+from hssp.models.net import RequestModel
 from hssp.network.downloader import HttpxDownloader, RequestsDownloader
 from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
@@ -156,48 +156,75 @@ class Net:
 
         return resp
 
-    def _set_fake_user_agent(self, data: RequestModel):
+    def create_request_model(
+        self,
+        url: str,
+        method: str,
+        params: dict = None,
+        json_data: dict = None,
+        form_data: dict[str, Any] | list[tuple[str]] | str | bytes | None = None,
+        user_agent: str = None,
+        headers: dict = None,
+        cookies: dict = None,
+        timeout: float = None,
+        proxy: str | None = None,
+        retrys_count: int | None = None,
+        retrys_delay: float | None = None,
+    ) -> RequestModel:
         """
-        如果传入的UA是符合FakeUserAgent属性的，则使用FakeUserAgent获取一个假的UA
+        创建并配置请求模型，应用默认设置
         Args:
-            data: 请求数据
-        """
-        fake_user_agent_attrs = ["random", "chrome", "googlechrome", "edge", "firefox", "ff", "safari"]
-        if data.user_agent not in fake_user_agent_attrs:
-            return
-
-        fake_user_agent = FakeUserAgent()
-        data.user_agent = getattr(fake_user_agent, data.user_agent)
-
-    def _set_default_request(self, data: RequestModel):
-        """
-        使用设置里面的全局设置对情求数据进行设置
-        Args:
-            data: 情求数据
+            url: 地址
+            method: 请求方法
+            params: url参数
+            json_data: json参数
+            form_data: form参数。
+            user_agent: ua 可以设置为 random, chrome, googlechrome, edge, firefox, ff, safari 或者具体ua
+            headers: 请求头
+            cookies: cookies
+            timeout: 超时时间
+            proxy: 代理设置
+            retrys_count: 重试次数
+            retrys_delay: 重试延时
 
         Returns:
-
+            返回请求模型
         """
-        if data.user_agent is None:
-            data.user_agent = settings.user_agent
 
-        if data.headers is None:
-            data.headers = settings.headers or {}
+        # 如果传入的UA是符合FakeUserAgent属性的，则使用FakeUserAgent获取一个假的UA
+        user_agent = user_agent or settings.user_agent
+        fake_user_agent_attrs = ["random", "chrome", "googlechrome", "edge", "firefox", "ff", "safari"]
+        user_agent = getattr(FakeUserAgent(), user_agent) if user_agent in fake_user_agent_attrs else user_agent
 
-        if data.cookies is None:
-            data.cookies = settings.cookies
+        # 更新请求头的UA
+        headers = headers or settings.headers or {}
+        if user_agent:
+            headers.update({"User-Agent": user_agent})
 
-        if data.timeout is None:
-            data.timeout = settings.timeout
+        # 处理 POST form的数据
+        # 有些情况form数据的key是相同的，而且还要求顺序，这时使用dict就无法实现
+        # 这里是把form数据手动转为经过编码的字符串类型
+        if form_data and isinstance(form_data, list | dict):
+            form_data = QueryParams(form_data).__str__()
+            headers["Content-Type"] = "application/x-www-form-urlencoded"
 
-        if data.proxy is None:
-            data.proxy = settings.proxy
+        # 创建请求模型
+        request_data = RequestModel(
+            url=url,
+            method=method,
+            url_params=params,
+            json_data=json_data,
+            form_data=form_data,
+            user_agent=user_agent,
+            headers=headers,
+            cookies=cookies or settings.cookies or {},
+            timeout=timeout if timeout is not None else settings.timeout,
+            proxy=proxy if proxy is not None else settings.proxy,
+            retrys_count=retrys_count if retrys_count is not None else settings.retrys_count,
+            retrys_delay=retrys_delay if retrys_delay is not None else settings.retrys_delay,
+        )
 
-        if data.retrys_count is None:
-            data.retrys_count = settings.retrys_count
-
-        if data.retrys_delay is None:
-            data.retrys_delay = settings.retrys_delay
+        return request_data
 
     async def request(self, data: RequestModel) -> Response:
         """
@@ -206,27 +233,10 @@ class Net:
             data: 请求参数
 
         Returns:
-
+            返回响应
         """
-        self._set_default_request(data)
-
         if data.proxy:
             self._downloader.set_proxy(data.proxy)
-
-        # 设置假UA
-        self._set_fake_user_agent(data)
-
-        # 更新UA
-        if data.user_agent:
-            data.headers.update({"User-Agent": data.user_agent})
-
-        # 处理 POST form的数据
-        # 有些情况form数据的key是相同的，而且还要求顺序，这时使用dict就无法实现
-        # 这里是把form数据手动转为经过编码的字符串类型
-        if data.form_data and isinstance(data.form_data, list | dict):
-            form_data = QueryParams(data.form_data).__str__()
-            data.form_data = form_data
-            data.headers["Content-Type"] = "application/x-www-form-urlencoded"
 
         if data.retrys_count < 1:
             return await self._request(data)
@@ -252,8 +262,9 @@ class Net:
         headers: dict = None,
         cookies: dict = None,
         timeout: float = None,
-        proxy: ProxyModel | str | None = None,
-        request_data: RequestModel = None,
+        proxy: str | None = None,
+        retrys_count: int | None = None,
+        retrys_delay: float | None = None,
     ) -> Response:
         """
         发起GET请求
@@ -265,20 +276,24 @@ class Net:
             cookies: cookies
             timeout: 超时时间
             proxy: 代理设置
-            request_data: 其他的请求参数
+            retrys_count: int | None = None,
+            retrys_delay: float | None = None,
 
         Returns:
 
         """
-        request_data = request_data or RequestModel(url=url, method="GET")
-        request_data.url = url
-        request_data.method = "GET"
-        request_data.url_params = params
-        request_data.user_agent = user_agent
-        request_data.headers = headers
-        request_data.cookies = cookies
-        request_data.timeout = timeout
-        request_data.proxy = proxy
+        request_data = self.create_request_model(
+            url=url,
+            method="GET",
+            params=params,
+            user_agent=user_agent,
+            headers=headers,
+            cookies=cookies,
+            timeout=timeout,
+            proxy=proxy,
+            retrys_count=retrys_count,
+            retrys_delay=retrys_delay,
+        )
 
         return await self.request(request_data)
 
@@ -292,36 +307,90 @@ class Net:
         headers: dict = None,
         cookies: dict = None,
         timeout: float = None,
-        proxy: ProxyModel | str | None = None,
-        request_data: RequestModel = None,
+        proxy: str | None = None,
+        retrys_count: int | None = None,
+        retrys_delay: float | None = None,
     ) -> Response:
         """
         发起POST请求
         Args:
             url: 地址
             params: url参数
-            json_data:
-            form_data:
-            user_agent: ua
+            json_data: json参数
+            form_data: form参数。
+            user_agent: ua 可以设置为 random, chrome, googlechrome, edge, firefox, ff, safari 或者具体ua
             headers: 请求头
             cookies: cookies
             timeout: 超时时间
             proxy: 代理设置
-            request_data: 其他的请求参数
+            retrys_count: 重试次数
+            retrys_delay: 重试延时
 
         Returns:
 
         """
-        request_data = request_data or RequestModel(url=url, method="POST")
-        request_data.url = url
-        request_data.method = "POST"
-        request_data.url_params = params
-        request_data.user_agent = user_agent
-        request_data.headers = headers
-        request_data.cookies = cookies
-        request_data.timeout = timeout
-        request_data.json_data = json_data
-        request_data.form_data = form_data
-        request_data.proxy = proxy
+        request_data = self.create_request_model(
+            url=url,
+            method="POST",
+            params=params,
+            json_data=json_data,
+            form_data=form_data,
+            user_agent=user_agent,
+            headers=headers,
+            cookies=cookies,
+            timeout=timeout,
+            proxy=proxy,
+            retrys_count=retrys_count,
+            retrys_delay=retrys_delay,
+        )
+
+        return await self.request(request_data)
+
+    async def head(
+        self,
+        url: str,
+        params: dict = None,
+        json_data: dict = None,
+        form_data: dict[str, Any] | list[tuple[str]] | str | bytes | None = None,
+        user_agent: str = None,
+        headers: dict = None,
+        cookies: dict = None,
+        timeout: float = None,
+        proxy: str | None = None,
+        retrys_count: int | None = None,
+        retrys_delay: float | None = None,
+    ) -> Response:
+        """
+        发起HEAD请求
+        Args:
+            url: 地址
+            params: url参数
+            json_data: json参数
+            form_data: form参数。
+            user_agent: ua 可以设置为 random, chrome, googlechrome, edge, firefox, ff, safari 或者具体ua
+            headers: 请求头
+            cookies: cookies
+            timeout: 超时时间
+            proxy: 代理设置
+            retrys_count: 重试次数
+            retrys_delay: 重试延时
+
+        Returns:
+
+        """
+        request_data = self.create_request_model(
+            url=url,
+            method="HEAD",
+            params=params,
+            json_data=json_data,
+            form_data=form_data,
+            user_agent=user_agent,
+            headers=headers,
+            cookies=cookies,
+            timeout=timeout,
+            proxy=proxy,
+            retrys_count=retrys_count,
+            retrys_delay=retrys_delay,
+        )
 
         return await self.request(request_data)

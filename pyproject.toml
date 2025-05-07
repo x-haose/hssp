@@ -1,6 +1,6 @@
 [project]
 name = "hssp"
-version = "0.4.14"
+version = "0.4.15"
 keywords = ["爬虫", "异步", "爬虫框架"]
 description = "一个简单快速的异步爬虫框架"
 authors = [
@@ -26,8 +26,6 @@ readme = "README.md"
 requires-python = ">= 3.10"
 
 dependencies = [
-    # 快速的事件循环
-    "uvloop; sys_platform != 'win32' and implementation_name == 'cpython'",
     # css、xpath解析器
     "parsel>=1.9.1",
     # 日志打印
@@ -47,7 +45,7 @@ dependencies = [
     # httpx 异步网络请求
     "httpx[http2,socks]>=0.28.1",
     # aiohttp 异步网络请求
-    "aiohttp==3.9.5",
+    "aiohttp>=3.9.5",
     # 同步requests情求库
     "requests>=2.31.0",
     # 定时任务
@@ -65,22 +63,20 @@ homepage = "https://github.com/x-haose/hssp"
 repository = "https://github.com/x-haose/hssp"
 documentation = "https://github.com/x-haose/hssp"
 
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "twine>=6.1.0",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.rye]
-managed = true
-dev-dependencies = [
-    "pre-commit>=4.0.1",
-    "twine>=6.0.1",
-]
+[tool.hatch.build.targets.sdist]
 include = [
-    "src/hssp/"
+    "src",
 ]
-
-[tool.hatch.metadata]
-allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hssp"]
@@ -164,12 +160,3 @@ unfixable = []
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
-
-
-[tool.rye.scripts]
-publish_testpypi = { cmd = "rye run twine upload -r testpypi dist/*" }
-publish_pypi = { cmd = "rye run twine upload dist/*" }
-sb = { cmd = "rye build --clean" }
-spt = { chain = ["sb", "publish_testpypi"] }
-sp = { chain = ["sb", "publish_pypi"] }
-check = { cmd = "rye run pre-commit run --all-files" }

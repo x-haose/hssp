@@ -4,15 +4,6 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
-class ProxyModel(BaseModel):
-    """
-    代理设置模型
-    """
-
-    http: str = ""
-    https: str = ""
-
-
 class DownloaderEnum(Enum):
     """
     下载器的枚举
@@ -39,6 +30,6 @@ class RequestModel(BaseModel):
     headers: dict[str, Any] | None = Field(title="请求头", default=None)
     cookies: dict[str, Any] | None = Field(title="传递的cookies", default=None)
     timeout: int | None = Field(title="请求超时时间", default=None)
-    proxy: ProxyModel | str | None = Field(title="代理设置", default=None)
+    proxy: str | None = Field(title="代理设置", default=None)
     retrys_count: int | None = Field(title="重试次数", default=None)
-    retrys_delay: int | None = Field(title="重试延时", default=None)
+    retrys_delay: float | None = Field(title="重试延时", default=None)

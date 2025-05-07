@@ -5,7 +5,7 @@ from curl_cffi.const import CurlHttpVersion
 from curl_cffi.requests import AsyncSession
 
 from hssp.exception.exception import RequestStateException
-from hssp.models.net import ProxyModel, RequestModel
+from hssp.models.net import RequestModel
 from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
 
@@ -29,15 +29,12 @@ class CurlCffiDownloader(DownloaderBase):
     def cookies(self):
         return self.client.cookies.get_dict()
 
-    def set_proxy(self, proxy: ProxyModel | str): ...
+    def set_proxy(self, proxy: str): ...
 
     async def _download(self, request_data: RequestModel) -> Response:
-        if isinstance(request_data.proxy, ProxyModel):
-            proxy = request_data.proxy.https or request_data.proxy.http
-        else:
-            proxy = request_data.proxy
-        proxies = {"https": proxy, "http": proxy}
+        proxies = {"https": request_data.proxy, "http": request_data.proxy}
 
+        # noinspection PyTypeChecker
         response = await self.client.request(
             method=request_data.method,
             url=request_data.url,

@@ -46,8 +46,7 @@ async def main():
             "https://httpbin.org/post",
             timeout=3,
             form_data={"aa": 111},
-            request_data=RequestModel(url="", retrys_count=0),
-            proxy="socks5://localhost:9150"
+            retrys_count=0,
         )
         logger.info(
             "\n"

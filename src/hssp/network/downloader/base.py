@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from asyncio import Semaphore
 
-from hssp.models.net import ProxyModel, RequestModel
+from hssp.models.net import RequestModel
 from hssp.network.response import Response
 
 
@@ -41,7 +41,7 @@ class DownloaderBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def set_proxy(self, proxy: ProxyModel):
+    def set_proxy(self, proxy: str):
         """
         设置代理，有些客户端不可以在请求时设置代理，所以提供一个入口
         Args:

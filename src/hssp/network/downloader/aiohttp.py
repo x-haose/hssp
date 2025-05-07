@@ -3,7 +3,7 @@ from asyncio import Semaphore
 from aiohttp import ClientSession, ClientTimeout, ContentTypeError, TCPConnector
 
 from hssp.exception.exception import RequestStateException
-from hssp.models.net import ProxyModel, RequestModel
+from hssp.models.net import RequestModel
 from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
 
@@ -22,18 +22,13 @@ class AiohttpDownloader(DownloaderBase):
     async def close(self):
         await self.client.close()
 
-    def set_proxy(self, proxy: ProxyModel | str): ...
+    def set_proxy(self, proxy: str): ...
 
     @property
     def cookies(self):
         return {cookie.key: cookie.value for cookie in self.client.cookie_jar}
 
     async def _download(self, request_data: RequestModel) -> Response:
-        if isinstance(request_data.proxy, ProxyModel):
-            proxy = request_data.proxy.https or request_data.proxy.http
-        else:
-            proxy = request_data.proxy
-
         timeout = ClientTimeout(total=request_data.timeout)
         response = await self.client.request(
             method=request_data.method,
@@ -43,7 +38,7 @@ class AiohttpDownloader(DownloaderBase):
             json=request_data.json_data,
             cookies=request_data.cookies,
             headers=request_data.headers,
-            proxy=proxy,
+            proxy=request_data.proxy,
             timeout=timeout,
         )
 

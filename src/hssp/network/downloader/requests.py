@@ -4,7 +4,7 @@ from requests import JSONDecodeError, Session
 from requests.utils import cookiejar_from_dict, dict_from_cookiejar
 
 from hssp.exception.exception import RequestStateException
-from hssp.models.net import ProxyModel, RequestModel
+from hssp.models.net import RequestModel
 from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
 
@@ -21,18 +21,14 @@ class RequestsDownloader(DownloaderBase):
     async def close(self):
         self.client.close()
 
-    def set_proxy(self, proxy: ProxyModel | str): ...
+    def set_proxy(self, proxy: str): ...
 
     @property
     def cookies(self):
         return dict_from_cookiejar(self.client.cookies)
 
     async def _download(self, request_data: RequestModel) -> Response:
-        if isinstance(request_data.proxy, ProxyModel):
-            proxy = request_data.proxy.https or request_data.proxy.http
-        else:
-            proxy = request_data.proxy
-        proxies = {"https": proxy, "http": proxy}
+        proxies = {"https": request_data.proxy, "http": request_data.proxy}
 
         response = self.client.request(
             method=request_data.method,
