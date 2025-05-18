@@ -1,5 +1,7 @@
 # HSSP 爬虫框架
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/x-haose/hssp)
+
 一个基于python asyncio开发的爬虫框架 (开发中)
 
 ## 作者
@@ -15,6 +17,7 @@
 - 请求前、响应后、重试后监听
 
 ## 计划
+
 - 在情求过程中临时更换下载器：比如net初始化时使用的是httpx下载器，其中一个情求要临时切换至 `DrissionPage`, 其他的依旧是httpx
 - 支持 `DrissionPage` 浏览器渲染的下载器
 - 支持 `playwright` 浏览器渲染的下载器
