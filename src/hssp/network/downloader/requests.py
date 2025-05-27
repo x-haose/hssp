@@ -42,7 +42,7 @@ class RequestsDownloader(DownloaderBase):
             timeout=request_data.timeout,
         )
 
-        if not response.ok:
+        if not response.ok and request_data.raise_status:
             raise RequestStateException(code=response.status_code)
 
         resp_headers = dict(response.headers)

@@ -26,6 +26,7 @@ class RequestModel(BaseModel):
     form_data: dict[str, Any] | list[tuple[str]] | str | bytes | None = Field(title="form请求的数据", default=None)
     json_data: dict[str, Any] | None = Field(title="json请求的数据", default=None)
     # 下面这些属性, 默认值为设置中的值
+    raise_status: bool = Field(title="是否抛出状态码“不符合”的异常，“不符合”根据具体的下载器定义决定", default=True)
     user_agent: str | None = Field(title="请求UA", default=None)
     headers: dict[str, Any] | None = Field(title="请求头", default=None)
     cookies: dict[str, Any] | None = Field(title="传递的cookies", default=None)

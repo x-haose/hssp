@@ -170,6 +170,7 @@ class Net:
         proxy: str | None = None,
         retrys_count: int | None = None,
         retrys_delay: float | None = None,
+        raise_status: bool = True,
     ) -> RequestModel:
         """
         创建并配置请求模型，应用默认设置
@@ -186,6 +187,7 @@ class Net:
             proxy: 代理设置
             retrys_count: 重试次数
             retrys_delay: 重试延时
+            raise_status: 是否抛出状态码“不符合”的异常，“不符合”根据具体的下载器定义决定
 
         Returns:
             返回请求模型
@@ -222,6 +224,7 @@ class Net:
             proxy=proxy if proxy is not None else settings.proxy,
             retrys_count=retrys_count if retrys_count is not None else settings.retrys_count,
             retrys_delay=retrys_delay if retrys_delay is not None else settings.retrys_delay,
+            raise_status=raise_status,
         )
 
         return request_data
@@ -265,6 +268,7 @@ class Net:
         proxy: str | None = None,
         retrys_count: int | None = None,
         retrys_delay: float | None = None,
+        raise_status: bool = True,
     ) -> Response:
         """
         发起GET请求
@@ -278,6 +282,7 @@ class Net:
             proxy: 代理设置
             retrys_count: int | None = None,
             retrys_delay: float | None = None,
+            raise_status: 是否抛出状态码“不符合”的异常，“不符合”根据具体的下载器定义决定
 
         Returns:
 
@@ -293,6 +298,7 @@ class Net:
             proxy=proxy,
             retrys_count=retrys_count,
             retrys_delay=retrys_delay,
+            raise_status=raise_status,
         )
 
         return await self.request(request_data)
@@ -310,6 +316,7 @@ class Net:
         proxy: str | None = None,
         retrys_count: int | None = None,
         retrys_delay: float | None = None,
+        raise_status: bool = True,
     ) -> Response:
         """
         发起POST请求
@@ -325,6 +332,7 @@ class Net:
             proxy: 代理设置
             retrys_count: 重试次数
             retrys_delay: 重试延时
+            raise_status: 是否抛出状态码“不符合”的异常，“不符合”根据具体的下载器定义决定
 
         Returns:
 
@@ -342,6 +350,7 @@ class Net:
             proxy=proxy,
             retrys_count=retrys_count,
             retrys_delay=retrys_delay,
+            raise_status=raise_status,
         )
 
         return await self.request(request_data)
@@ -359,6 +368,7 @@ class Net:
         proxy: str | None = None,
         retrys_count: int | None = None,
         retrys_delay: float | None = None,
+        raise_status: bool = True,
     ) -> Response:
         """
         发起HEAD请求
@@ -374,6 +384,7 @@ class Net:
             proxy: 代理设置
             retrys_count: 重试次数
             retrys_delay: 重试延时
+            raise_status: 是否抛出状态码“不符合”的异常，“不符合”根据具体的下载器定义决定
 
         Returns:
 
@@ -391,6 +402,7 @@ class Net:
             proxy=proxy,
             retrys_count=retrys_count,
             retrys_delay=retrys_delay,
+            raise_status=raise_status,
         )
 
         return await self.request(request_data)

@@ -42,7 +42,7 @@ class AiohttpDownloader(DownloaderBase):
             timeout=timeout,
         )
 
-        if not response.ok:
+        if not response.ok and request_data.raise_status:
             raise RequestStateException(code=response.status)
 
         resp_headers = dict(response.headers)
