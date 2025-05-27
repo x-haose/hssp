@@ -16,12 +16,13 @@
 - 可选的多种下载器: httpx、aiohttp、requests、curl-cffi等
 - 请求前、响应后、重试后监听
 
-## 计划
+## 路线
 
+- 增加下载器 [requests-go](https://github.com/wangluozhe/requests-go)
+- 增加其他解析器
 - 在情求过程中临时更换下载器：比如net初始化时使用的是httpx下载器，其中一个情求要临时切换至 `DrissionPage`, 其他的依旧是httpx
-- 支持 `DrissionPage` 浏览器渲染的下载器
-- 支持 `playwright` 浏览器渲染的下载器
-- 针对 `curl-cffi` 支持更多配置项及自定义项
+- 支持 `DrissionPage`、`playwright` 浏览器渲染的下载器
+- 下载器支持更多配置项及自定义项
 - 编写详细使用文档
 
 ## 安装
