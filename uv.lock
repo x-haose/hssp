@@ -626,6 +626,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-settings", extra = ["toml", "yaml"] },
     { name = "requests" },
+    { name = "requests-go" },
     { name = "tenacity" },
 ]
 
@@ -651,6 +652,7 @@ requires-dist = [
     { name = "pydantic", extras = ["dotenv"], specifier = ">=2.9.2" },
     { name = "pydantic-settings", extras = ["yaml", "toml"], specifier = ">=2.5.2" },
     { name = "requests", specifier = ">=2.31.0" },
+    { name = "requests-go", specifier = ">=1.0.2" },
     { name = "tenacity", specifier = ">=8.3.0" },
 ]
 
@@ -1425,6 +1427,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pysocks"
+version = "1.7.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bd/11/293dd436aea955d45fc4e8a35b6ae7270f5b8e00b53cf6c024c83b657a11/PySocks-1.7.1.tar.gz", hash = "sha256:3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0", size = 284429 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8d/59/b4572118e098ac8e46e399a1dd0f2d85403ce8bbaad9ec79373ed6badaf9/PySocks-1.7.1-py3-none-any.whl", hash = "sha256:2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5", size = 16725 },
+]
+
+[[package]]
 name = "python-dotenv"
 version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1526,6 +1537,17 @@ sdist = { url = "https://files.pythonhosted.org/packages/72/97/bf44e6c6bd8ddbb99
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d7/25/dd878a121fcfdf38f52850f11c512e13ec87c2ea72385933818e5b6c15ce/requests_file-2.1.0-py2.py3-none-any.whl", hash = "sha256:cf270de5a4c5874e84599fc5778303d496c10ae5e870bfa378818f35d21bda5c", size = 4244 },
 ]
+
+[[package]]
+name = "requests-go"
+version = "1.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pysocks" },
+    { name = "requests" },
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/df/aa/34fb2a76d53f0e6d2399248679c1bbe10d9e1f7ba293a50634e0b23c41bc/requests_go-1.0.2.tar.gz", hash = "sha256:dcadfe2f81a7eb927e3cb54cf4254bccb408105b0c6e405f4d946a6232446485", size = 30304006 }
 
 [[package]]
 name = "requests-toolbelt"

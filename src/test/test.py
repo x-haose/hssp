@@ -2,8 +2,7 @@ import asyncio
 
 from hssp import Net
 from hssp.logger.log import Logger, hssp_logger
-from hssp.models.net import RequestModel
-from hssp.network.downloader import HttpxDownloader
+from hssp.models.net import DownloaderEnum, RequestModel
 from hssp.network.response import Response
 
 
@@ -20,6 +19,7 @@ async def request_before(request_data: RequestModel):
 def request_before_2(request_data: RequestModel):
     logger.info(f"请求之前打印：{request_data}")
     request_data.url_params = {"a": 1, "b": 2}
+    request_data.cookies = {"token": "sdjskfjsfjwi"}
     return request_data
 
 
@@ -34,7 +34,7 @@ def response_after_2(response: Response):
 
 
 async def main():
-    net = Net(HttpxDownloader)
+    net = Net(DownloaderEnum.AIOHTTP)
     net.request_retry_signal.connect(request_retry)
     net.request_before_signal.connect(request_before)
     net.request_before_signal.connect(request_before_2)

@@ -10,15 +10,14 @@
 
 ## 特性
 
-- 使用scrapy框架的选择器`parsel`作为内置网页选择器
+- 使用scrapy框架的选择器 [parsel](https://github.com/scrapy/parsel) 作为内置网页选择器
 - 基于tenacity的自动异常重试
 - 基于fake-useragent的可选随机UA
-- 可选的多种下载器: httpx、aiohttp、requests、curl-cffi等
+- 可选的多种下载器: [httpx](https://github.com/encode/httpx)、[aiohttp](https://github.com/aio-libs/aiohttp)、[requests](https://github.com/psf/requests)、[curl-cffi](https://github.com/lexiforest/curl_cffi)、[requests-go](https://github.com/wangluozhe/requests-go)
 - 请求前、响应后、重试后监听
 
 ## 路线
 
-- 增加下载器 [requests-go](https://github.com/wangluozhe/requests-go)
 - 增加其他解析器
 - 在情求过程中临时更换下载器：比如net初始化时使用的是httpx下载器，其中一个情求要临时切换至 `DrissionPage`, 其他的依旧是httpx
 - 支持 `DrissionPage`、`playwright` 浏览器渲染的下载器
@@ -37,10 +36,10 @@ pip install hssp
 
 ###
 
-使用 rye 安装 hssp
+使用 uv 安装 hssp
 
 ```bash
-rye add hssp
+uv add hssp
 ```
 
 ## 支持
@@ -49,7 +48,7 @@ rye add hssp
 
 ## 开发测试
 
-项目使用`rye`管理依赖，需先安装rye
+项目使用`uv`管理依赖，需先安装uv
 
 ```bash
     rye sync

@@ -1,6 +1,6 @@
 [project]
 name = "hssp"
-version = "0.4.16"
+version = "0.4.17"
 keywords = ["爬虫", "异步", "爬虫框架"]
 description = "一个简单快速的异步爬虫框架"
 authors = [
@@ -56,6 +56,8 @@ dependencies = [
     "drissionpage>=4.0.5.6",
     # curl-cffi情求库
     "curl-cffi>=0.7.2",
+    # requests-go 请求库
+    "requests-go>=1.0.2",
 ]
 
 [project.urls]

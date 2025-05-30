@@ -13,6 +13,7 @@ class DownloaderEnum(Enum):
     HTTPX = "httpx"
     REQUESTS = "requests"
     CURL_CFFI = "curl_cffi"
+    REQUESTS_GO = "requests_go"
 
 
 class RequestModel(BaseModel):

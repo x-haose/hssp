@@ -18,8 +18,14 @@ from tenacity import (
 
 from hssp.exception.exception import RequestException, RequestStateException
 from hssp.logger.log import hssp_logger
-from hssp.models.net import RequestModel
-from hssp.network.downloader import HttpxDownloader, RequestsDownloader
+from hssp.models.net import DownloaderEnum, RequestModel
+from hssp.network.downloader import (
+    AiohttpDownloader,
+    CurlCffiDownloader,
+    HttpxDownloader,
+    RequestsDownloader,
+    RequestsGoDownloader,
+)
 from hssp.network.downloader.base import DownloaderBase
 from hssp.network.response import Response
 from hssp.settings.settings import settings
@@ -28,7 +34,7 @@ from hssp.settings.settings import settings
 class Net:
     def __init__(
         self,
-        downloader_cls: type[DownloaderBase] = HttpxDownloader,
+        downloader_cls: type[DownloaderBase] | DownloaderEnum = DownloaderEnum.AIOHTTP,
         sem: Semaphore = None,
     ):
         """
@@ -36,6 +42,18 @@ class Net:
             downloader_cls: 使用的下载器
             sem: 信号量，控制并发
         """
+        match downloader_cls:
+            case DownloaderEnum.AIOHTTP:
+                downloader_cls = AiohttpDownloader
+            case DownloaderEnum.HTTPX:
+                downloader_cls = HttpxDownloader
+            case DownloaderEnum.REQUESTS:
+                downloader_cls = RequestsDownloader
+            case DownloaderEnum.CURL_CFFI:
+                downloader_cls = CurlCffiDownloader
+            case DownloaderEnum.REQUESTS_GO:
+                downloader_cls = RequestsGoDownloader
+
         self._downloader = downloader_cls(sem, settings.headers, settings.cookies)
         self.logger = hssp_logger.getChild("net")
 
